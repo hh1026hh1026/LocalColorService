@@ -21,7 +21,7 @@ Please review and adhere to our [Code of Conduct](CODE_OF_CONDUCT.md) in all int
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-org/LocalColorService.git
+   git clone https://github.com/hh1026hh1026/LocalColorService.git
    cd LocalColorService
    ```
 

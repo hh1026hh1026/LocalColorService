@@ -86,7 +86,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/LocalColorService.git
+git clone https://github.com/hh1026hh1026/LocalColorService.git
 cd LocalColorService
 
 # Install Python dependencies
