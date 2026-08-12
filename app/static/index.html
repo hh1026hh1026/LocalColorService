@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>本地智能调色服务 V0.5.2</title>
+<link rel="stylesheet" href="/static/style.css?v=0.6.19">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark">色</div>
+        <div>
+          <h1>本地智能调色服务 <span>V0.5.2</span></h1>
+          <p>场景分组 · GradePlan · CanonCGT · AI LUT · 审批与质量检查</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="status-pill" id="serviceStatus">服务检查中</span>
+        <span class="status-pill" id="gpuStatus">显卡检查中</span>
+        <span class="status-pill" id="accelerationStatus">加速能力检查中</span>
+        <a class="ghost-btn task-nav-link" href="/tasks">任务管理</a>
+        <button class="ghost-btn" type="button" onclick="toggleLogConsole()">运行日志</button>
+      </div>
+    </header>
+
+    <main class="main-grid">
+      <aside class="control-column">
+        <section class="panel source-panel">
+          <div class="section-heading">
+            <span class="step">01</span>
+            <div><h2>选择待调色素材</h2><p>可粘贴本机绝对路径，也可上传文件。</p></div>
+          </div>
+          <div class="path-row">
+            <input id="filePathInput" type="text" value="F:\LocalColorService\test_assets\neutral_sample.mp4" placeholder="图片或视频的绝对路径">
+            <input id="filePickerInput" type="file" hidden onchange="handleFileSelected(this, 'filePathInput')">
+            <button class="secondary-btn" type="button" onclick="triggerFilePicker('filePickerInput')">选择文件</button>
+          </div>
+          <div class="quick-links">
+            <span>测试素材：</span>
+            <button type="button" onclick="selectSample('neutral_sample.mp4')">标准视频</button>
+            <button type="button" onclick="selectSample('sample_image.png')">标准图片</button>
+          </div>
+        </section>
+
+        <section class="panel featured-panel">
+          <div class="section-heading">
+            <span class="step">02</span>
+            <div><h2>主流程一 · 预设 / AdaInt 项目调色</h2><p>分析 → 预设配方 → 整片预览 → 人工微调或场景 AdaInt → 确认并最终渲染。</p></div>
+          </div>
+          <div class="form-grid three">
+            <label>检测方式
+              <select id="sceneDetectorSelect">
+                <option value="adaptive">自适应检测（推荐）</option>
+                <option value="content">内容变化检测</option>
+              </select>
+            </label>
+            <label>检测阈值
+              <input id="sceneThresholdInput" type="number" min="0.1" max="100" step="0.1" value="3.0">
+            </label>
+            <label>最短镜头帧数
+              <input id="minSceneLenInput" type="number" min="1" max="300" value="12">
+            </label>
+          </div>
+          <details id="legacyAdvancedControls" class="legacy-advanced-controls">
+            <summary>高级参数（主页面快速预览）</summary>
+            <div class="advanced-slider-grid">
+              <label>色调偏移（Tint）<input id="tintSlider" type="range" min="-0.5" max="0.5" step="0.01" value="0"><output id="tintVal">0.00</output></label>
+              <label>对比中心（Pivot）<input id="pivotSlider" type="range" min="0.01" max="1" step="0.01" value="0.18"><output id="pivotVal">0.18</output></label>
+              <label>高光滚降（Rolloff）<input id="rolloffSlider" type="range" min="0" max="1" step="0.05" value="0"><output id="rolloffVal">0.00</output></label>
+              <label>高光柔化（Softness）<input id="softnessSlider" type="range" min="0" max="1" step="0.05" value="0"><output id="softnessVal">0.00</output></label>
+              <label>肤色保护<input id="skinProtectionSlider" type="range" min="0" max="1" step="0.05" value="0"><output id="skinProtectionVal">0.00</output></label>
+              <label>色域保护<input id="gamutProtectionSlider" type="range" min="0" max="1" step="0.05" value="0"><output id="gamutProtectionVal">0.00</output></label>
+              <label>色彩密度<input id="colorDensitySlider" type="range" min="-1" max="1" step="0.05" value="0"><output id="colorDensityVal">0.00</output></label>
+            </div>
+            <div class="advanced-vector-grid">
+              <label>Lift 黑位 R<input id="liftRSlider" type="range" min="-0.2" max="0.2" step="0.01" value="0"></label><label>Lift 黑位 G<input id="liftGSlider" type="range" min="-0.2" max="0.2" step="0.01" value="0"></label><label>Lift 黑位 B<input id="liftBSlider" type="range" min="-0.2" max="0.2" step="0.01" value="0"></label>
+              <label>Gamma 中间调 R<input id="gammaRSlider" type="range" min="0.5" max="1.5" step="0.01" value="1"></label><label>Gamma 中间调 G<input id="gammaGSlider" type="range" min="0.5" max="1.5" step="0.01" value="1"></label><label>Gamma 中间调 B<input id="gammaBSlider" type="range" min="0.5" max="1.5" step="0.01" value="1"></label>
+              <label>Gain 高光 R<input id="gainRSlider" type="range" min="0.5" max="1.5" step="0.01" value="1"></label><label>Gain 高光 G<input id="gainGSlider" type="range" min="0.5" max="1.5" step="0.01" value="1"></label><label>Gain 高光 B<input id="gainBSlider" type="range" min="0.5" max="1.5" step="0.01" value="1"></label>
+              <label>RGB 增益 R<input id="rgbRSlider" type="range" min="0.8" max="1.2" step="0.01" value="1"></label><label>RGB 增益 G<input id="rgbGSlider" type="range" min="0.8" max="1.2" step="0.01" value="1"></label><label>RGB 增益 B<input id="rgbBSlider" type="range" min="0.8" max="1.2" step="0.01" value="1"></label>
+            </div>
+          </details>
+          <div class="form-grid two">
+            <label>整体风格
+              <select id="lookSelect"><option value="neutral_broadcast">自然广播</option></select>
+            </label>
+            <label>工作模式
+              <select id="workflowSelect">
+                <option value="professional_assisted">专业辅助（推荐）</option>
+                <option value="automatic">自动（含受限 Hero Shot 匹配）</option>
+                <option value="reference_assisted">参考图辅助</option>
+              </select>
+            </label>
+            <label>自动质量档位
+              <select id="qualityProfileSelect">
+                <option value="balanced" selected>平衡模式（推荐）</option>
+                <option value="broadcast_safe">广播安全</option>
+                <option value="creative">创意模式</option>
+              </select>
+            </label>
+          </div>
+          <div class="look-profile" id="lookProfile">
+            <div><span>适用内容</span><strong id="lookSuitable">新闻、访谈、纪录片</strong></div>
+            <div><span>核心特点</span><strong id="lookCharacteristics">中性、稳定、肤色自然、广播安全</strong></div>
+            <div><span>必须保护</span><strong id="lookProtection">肤色、白色、合法电平</strong></div>
+            <p id="lookTechnicalNote">这是全画面工程创意预设；技术校正会先于 Look 执行。</p>
+          </div>
+          <div class="workflow-actions">
+            <button class="primary-btn" type="button" onclick="runSceneAnalysis()"><b>1</b> 检测并分析镜头</button>
+            <button class="primary-btn" type="button" onclick="createProjectRecipe()"><b>2</b> 生成项目配方</button>
+            <button class="accent-btn" type="button" onclick="runProjectRender(true)"><b>3</b> 预览整个视频</button>
+            <button class="secondary-btn" type="button" onclick="saveGradePlan(true)"><b>4</b> 保存人工微调并预览</button>
+          </div>
+          <div class="divider"><span>可选：为场景生成 AdaInt LUT</span></div>
+          <div class="form-grid two">
+            <label>作用范围<select id="adaintGroupSelect"><option value="__all__">全部场景组（默认）</option></select></label>
+            <label>场景 LUT 强度<input id="adaintStrengthInput" type="number" min="0" max="1" step="0.05" value="0.75"></label>
+          </div>
+          <div class="workflow-actions compact">
+            <button class="accent-btn" type="button" onclick="generateSceneGroupAdaInt()">生成场景 AdaInt 并预览整片</button>
+            <button class="success-btn" type="button" onclick="approveAndRender()">确认当前方案并最终渲染</button>
+          </div>
+          <div class="progress-card">
+            <div><span>镜头分析</span><strong id="sceneJobState">尚未开始</strong></div>
+            <div><span>项目配方</span><strong id="projectJobState">尚未开始</strong></div>
+            <div><span>审批状态</span><strong id="approvalState">未生成</strong></div>
+          </div>
+          <div class="export-row">
+            <select id="exportFormatSelect" aria-label="导出格式">
+              <option value="cube">CUBE 三维查找表</option>
+              <option value="cc">ASC-CDL CC 文件</option>
+              <option value="ccc">ASC-CDL CCC 项目文件</option>
+              <option value="clf">通用 CLF 文件</option>
+            </select>
+            <input id="exportSceneIdInput" type="text" placeholder="镜头编号（可选）">
+            <button class="secondary-btn" type="button" onclick="exportProject()">导出配方</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <span class="step">03</span>
+            <div><h2>主流程二 · CanonCGT 参考图匹配</h2><p>生成项目后默认选择当前 SceneGroup；全视频模式也会逐组生成独立 LUT，预览始终是整个视频。</p></div>
+          </div>
+          <div class="model-strip">
+            <div><span>AdaInt 模型</span><strong id="adaintModelStatus">检查中</strong></div>
+            <div><span>运行设备</span><strong id="torchDeviceStatus">检查中</strong></div>
+            <div><span>CanonCGT</span><strong id="canoncgtModelStatus">检查中</strong></div>
+          </div>
+          <div class="form-grid two">
+            <label>取样时间（秒，可留空）
+              <input id="sampleTimeInput" type="number" min="0" step="0.1" placeholder="自动取中间帧">
+            </label>
+            <label>LUT 精度
+              <select id="aiLutSizeSelect"><option value="33">33 阶（推荐）</option><option value="65">65 阶（高精度）</option></select>
+            </label>
+          </div>
+          <div class="inline-actions">
+            <button class="accent-btn" type="button" onclick="runAdaInt()">生成 AdaInt LUT</button>
+            <button class="secondary-btn" id="previewAdaIntBtn" type="button" onclick="previewAdaInt()" disabled>预览 AdaInt 效果</button>
+          </div>
+          <div class="divider"><span>参考图生成三套候选</span></div>
+          <div class="path-row">
+            <input id="referencePathInput" type="text" placeholder="参考图片或视频的绝对路径">
+            <input id="referencePickerInput" type="file" hidden onchange="handleFileSelected(this, 'referencePathInput')">
+            <button class="secondary-btn" type="button" onclick="triggerFilePicker('referencePickerInput')">选择参考图</button>
+          </div>
+          <div class="inline-actions">
+            <button class="secondary-btn" type="button" onclick="runReferencePreflight()">检查参考图质量与适配度</button>
+          </div>
+          <div class="reference-preflight" id="referencePreflight" hidden></div>
+          <details class="reference-guide">
+            <summary>什么样的参考图效果最好？</summary>
+            <ul>
+              <li>PNG 或高质量 JPEG，sRGB/Rec.709 成片画面，建议 1080p、短边至少 512px。</li>
+              <li>尽量与目标场景主体、光线方向和明暗结构接近；人物场景优先选择肤色清楚的参考。</li>
+              <li>避免 Log/RAW/HDR 截图、字幕、播放器界面、黑边、水印，以及大面积死黑或过曝。</li>
+              <li>室内、室外、白天、夜晚差异明显时，建议每个 SceneGroup 分别提供参考图。</li>
+            </ul>
+          </details>
+          <label class="field">候选生成方式
+            <select id="candidateEngineSelect">
+              <option value="canoncgt">CanonCGT 参考匹配（推荐）</option>
+              <option value="statistical">统计匹配（本机可直接运行）</option>
+              <option value="diffusion">扩散模型（需配置外部模型）</option>
+            </select>
+          </label>
+          <label class="field">应用到场景组
+            <select id="referenceGroupSelect"><option value="__all__">全视频 / 全部场景组（逐组生成 LUT）</option></select>
+          </label>
+          <p class="empty-note" id="referenceScopeHelp">默认处理整部视频：CanonCGT 会为每个 SceneGroup 生成候选并在最终预览中应用。若只想调整一个场景组，再从下拉框选择具体组。</p>
+          <button class="primary-btn full" type="button" onclick="runReferenceCandidates()">生成 A / B / C（生成后手动选择）</button>
+          <div class="candidate-grid" id="candidatePanel">
+            <p class="empty-note">请先生成项目配方；候选生成后检查分数并手动选择 A/B/C 预览整个视频。</p>
+          </div>
+          <div class="workflow-actions compact">
+            <button class="accent-btn" type="button" onclick="runProjectRender(true)">预览当前整个项目</button>
+            <button class="success-btn" type="button" onclick="approveAndRender()">确认参考方案并最终渲染</button>
+          </div>
+        </section>
+
+        <details class="panel legacy-panel">
+          <summary>快速整片调色（兼容原有功能）</summary>
+          <label class="field">分析算法
+            <select id="providerSelect">
+              <option value="traditional_rule">传统规则自动校色</option>
+              <option value="adaptive_lut_deterministic">确定性自适应 LUT</option>
+              <option value="clahe_adaptive">局部对比度增强</option>
+              <option value="reinhard_transfer">参考图色彩迁移</option>
+            </select>
+          </label>
+          <div class="slider-grid">
+            <label>曝光 <output id="expVal">0.00 EV</output><input id="expSlider" type="range" min="-2" max="2" step="0.05" value="0"></label>
+            <label>对比度 <output id="contrastVal">1.00</output><input id="contrastSlider" type="range" min="0.5" max="1.5" step="0.02" value="1"></label>
+            <label>饱和度 <output id="satVal">1.00</output><input id="satSlider" type="range" min="0" max="2" step="0.02" value="1"></label>
+            <label>色温偏移 <output id="tempVal">0°</output><input id="tempSlider" type="range" min="-50" max="50" step="1" value="0"></label>
+          </div>
+          <div class="form-grid two">
+            <label>LUT 精度<select id="lutSizeSelect"><option value="33">33 阶</option><option value="65">65 阶</option></select></label>
+            <label class="check-label"><input id="splitScreenCheck" type="checkbox"> 生成左右分屏预览</label>
+          </div>
+          <div class="workflow-actions compact">
+            <button class="secondary-btn" onclick="runAnalyze()">画面分析</button>
+            <button class="accent-btn" onclick="runPreview()">快速预览</button>
+            <button class="success-btn" onclick="runFullRender()">正式渲染</button>
+            <button class="secondary-btn" onclick="runBakeLut()">导出 LUT</button>
+          </div>
+        </details>
+      </aside>
+
+      <section class="workspace-column">
+        <section class="panel task-board-panel">
+          <div class="panel-head">
+            <div><h2>任务看板</h2><p>显示正在执行、排队和最近结束的后台任务；取消不会删除历史文件。</p></div>
+            <button class="ghost-btn" type="button" onclick="refreshTaskBoard()">刷新</button>
+          </div>
+          <div class="task-board-summary" id="taskBoardSummary">正在读取任务状态…</div>
+          <div class="task-board-list" id="taskBoardList"></div>
+        </section>
+        <div class="metric-grid">
+          <div><span>平均亮度</span><strong id="statLumMean">—</strong></div>
+          <div><span>中位亮度</span><strong id="statLumMed">—</strong></div>
+          <div><span>暗部裁切</span><strong id="statBlackClip">—</strong></div>
+          <div><span>高光裁切</span><strong id="statHighClip">—</strong></div>
+        </div>
+
+        <section class="panel scene-results">
+          <div class="panel-head"><div><h2>镜头分析结果</h2><p id="sceneSummary">等待镜头分析</p></div><button class="ghost-btn" onclick="clearResults()">清空结果</button></div>
+          <div class="table-wrap">
+            <table><thead><tr><th>镜头</th><th>场景组</th><th>时间范围</th><th>曝光 EV</th><th>色温</th><th>Look 强度</th><th>主调参数</th><th>启用</th><th>提示</th></tr></thead><tbody id="sceneTableBody"><tr><td colspan="9" class="empty-cell">还没有镜头数据</td></tr></tbody></table>
+          </div>
+        </section>
+
+        <section class="panel timeline-panel">
+          <div class="panel-head">
+            <div><h2>镜头时间线</h2><p>点击镜头定位播放；支持单镜头、上下文和 SceneGroup 预览。</p></div>
+            <span class="timeline-legend" id="timelineAcceleration">等待分析代理</span>
+          </div>
+          <div class="timeline-track" id="timelineTrack"><p class="empty-note">完成镜头分析后显示缩略图时间线。</p></div>
+          <div class="timeline-inspector" id="timelineInspector" hidden>
+            <div class="timeline-selection">
+              <strong id="timelineShotTitle">未选择镜头</strong>
+              <span id="timelineShotMeta">—</span>
+            </div>
+            <div class="form-grid four timeline-fields">
+              <label>作用范围<select id="timelineScopeSelect"><option value="shot">仅当前镜头</option><option value="scene_group">当前 SceneGroup</option></select></label>
+              <label>曝光 EV<input id="timelineExposureInput" type="number" min="-2" max="2" step="0.05"></label>
+              <label>色温<input id="timelineTemperatureInput" type="number" min="-50" max="50" step="1"></label>
+              <label>Look 强度<input id="timelineStrengthInput" type="number" min="0" max="1" step="0.05"></label>
+            </div>
+            <details class="timeline-advanced-editor" open>
+              <summary>基础 / HDR / 通道参数</summary>
+              <div class="timeline-parameter-grid">
+                <label>色调偏移（Tint）<input id="timelineTintInput" type="number" min="-0.5" max="0.5" step="0.01"></label>
+                <label>对比度（Contrast）<input id="timelineContrastInput" type="number" min="0.5" max="1.5" step="0.01"></label>
+                <label>对比中心（Pivot）<input id="timelinePivotInput" type="number" min="0.01" max="1" step="0.01"></label>
+                <label>饱和度（Saturation）<input id="timelineSaturationInput" type="number" min="0" max="2" step="0.01"></label>
+                <label>高光滚降（Rolloff）<input id="timelineHighlightRolloffInput" type="number" min="0" max="1" step="0.05"></label>
+                <label>高光柔化（Softness）<input id="timelineHighlightSoftnessInput" type="number" min="0" max="1" step="0.05"></label>
+                <label>肤色保护<input id="timelineSkinProtectionInput" type="number" min="0" max="1" step="0.05"></label>
+                <label>色域保护<input id="timelineGamutProtectionInput" type="number" min="0" max="1" step="0.05"></label>
+                <label>色彩密度<input id="timelineColorDensityInput" type="number" min="-1" max="1" step="0.05"></label>
+              </div>
+              <div class="timeline-vector-grid">
+                <span>Lift 黑位</span><input id="timelineLiftRInput" type="number" step="0.01" aria-label="Lift 黑位 R"><input id="timelineLiftGInput" type="number" step="0.01" aria-label="Lift 黑位 G"><input id="timelineLiftBInput" type="number" step="0.01" aria-label="Lift 黑位 B">
+                <span>Gamma 中间调</span><input id="timelineGammaRInput" type="number" min="0.01" step="0.01" aria-label="Gamma 中间调 R"><input id="timelineGammaGInput" type="number" min="0.01" step="0.01" aria-label="Gamma 中间调 G"><input id="timelineGammaBInput" type="number" min="0.01" step="0.01" aria-label="Gamma 中间调 B">
+                <span>Gain 高光</span><input id="timelineGainRInput" type="number" step="0.01" aria-label="Gain 高光 R"><input id="timelineGainGInput" type="number" step="0.01" aria-label="Gain 高光 G"><input id="timelineGainBInput" type="number" step="0.01" aria-label="Gain 高光 B">
+                <span>RGB 增益</span><input id="timelineRgbRInput" type="number" min="0" step="0.01" aria-label="RGB 增益 R"><input id="timelineRgbGInput" type="number" min="0" step="0.01" aria-label="RGB 增益 G"><input id="timelineRgbBInput" type="number" min="0" step="0.01" aria-label="RGB 增益 B">
+              </div>
+            </details>
+            <div class="timeline-actions">
+              <button class="primary-btn" type="button" onclick="applyTimelineManual()">应用人工调整</button>
+              <button class="secondary-btn" type="button" onclick="runTimelineAuto('restore_auto')">恢复自动校正</button>
+              <button class="secondary-btn" type="button" onclick="runTimelineAuto('match_hero')">匹配 Hero Shot</button>
+              <button class="secondary-btn" type="button" onclick="generateSelectedTimelineAdaInt()">为本组生成 AdaInt</button>
+              <button class="accent-btn" type="button" onclick="previewTimeline('shot')">预览镜头 + 前后 1 秒</button>
+              <button class="accent-btn" type="button" onclick="previewTimeline('scene_group')">预览当前 SceneGroup</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel viewer-panel">
+          <div class="panel-head">
+            <div><h2>原片与结果对比</h2><p>两个视频共用播放进度，支持并排或滑动擦除。</p></div>
+            <div class="mode-switch"><button id="sideBySideModeBtn" onclick="setComparisonMode('side')">并排</button><button id="wipeModeBtn" class="active" onclick="setComparisonMode('wipe')">擦除</button></div>
+          </div>
+          <div class="comparison-selectors">
+            <label><span>A · 基准及声音</span><select id="compareASelect"></select></label>
+            <button class="swap-btn" onclick="swapComparisonMedia()" title="交换 A 与 B">交换</button>
+            <label><span>B · 调色结果</span><select id="compareBSelect"></select></label>
+            <button class="ghost-btn" onclick="refreshComparisonAssets()">刷新素材</button>
+          </div>
+          <div class="media-container" id="mediaContainer"><div class="media-placeholder"><div>▶</div><p>生成预览或正式结果后，将在这里与原片比较。</p></div></div>
+          <div class="comparison-controls" id="comparisonControls" hidden>
+            <button id="comparePlayBtn" onclick="toggleComparisonPlayback()" aria-label="播放">播放</button>
+            <span id="compareCurrentTime">00:00</span>
+            <input id="compareSeekSlider" type="range" min="0" max="1000" value="0" aria-label="播放进度">
+            <span id="compareDuration">00:00</span>
+            <select id="compareRateSelect" aria-label="播放速度"><option value="0.5">0.5 倍</option><option value="1" selected>1 倍</option><option value="1.5">1.5 倍</option><option value="2">2 倍</option></select>
+            <button id="compareAudioBtn" onclick="toggleComparisonAudio()">A 路声音</button>
+          </div>
+        </section>
+
+        <section class="panel result-panel">
+          <div class="panel-head"><div><h2>任务结果</h2><p>显示最近一次操作的任务编号、文件路径和质量检查。</p></div></div>
+          <div class="qc-banner" id="qcBanner"><span id="qcText">服务准备中</span></div>
+          <pre id="resultConsole">等待操作…</pre>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="log-drawer-overlay" id="logDrawerOverlay" onclick="toggleLogConsole()"></div>
+  <aside class="log-drawer" id="logDrawer">
+    <header><div><h2>后台运行日志</h2><p>用于排查任务失败原因</p></div><div><button class="secondary-btn" onclick="fetchSystemLogs()">刷新</button><button class="ghost-btn" onclick="toggleLogConsole()">关闭</button></div></header>
+    <div id="logConsoleBody" class="log-body"><div class="log-line">正在读取日志…</div></div>
+  </aside>
+
+  <div class="loader-overlay" id="loaderOverlay" hidden><div class="loader-card"><div class="spinner"></div><strong id="loaderText">正在处理</strong><span id="loaderDetail">请勿关闭页面</span><button type="button" id="loaderCancel" class="ghost-btn" hidden style="margin-top:12px">取消任务</button></div></div>
+  <div class="toast" id="toast" hidden></div>
+<script src="/static/app.js?v=0.6.19"></script>
+</body>
+</html>

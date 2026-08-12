@@ -1,0 +1,6 @@
+{
+  "job_id": "0566bcfcd806",
+  "job_type": "reference_candidates",
+  "source_path": "F:\\LocalColorService\\test_assets\\neutral_sample.mp4",
+  "reference_path": "F:\\LocalColorService\\test_assets\\overexposed_sample.mp4"
+}

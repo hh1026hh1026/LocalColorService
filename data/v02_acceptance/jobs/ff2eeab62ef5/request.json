@@ -1,0 +1,9 @@
+{
+  "job_id": "ff2eeab62ef5",
+  "job_type": "scenes",
+  "file_path": "F:\\LocalColorService\\test_assets\\neutral_sample.mp4",
+  "detector": "adaptive",
+  "threshold": 3.0,
+  "min_scene_len": 12,
+  "analyze": true
+}

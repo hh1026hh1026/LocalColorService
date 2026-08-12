@@ -1,0 +1,299 @@
+{
+  "detector": "adaptive",
+  "threshold": 3.0,
+  "media_info": {
+    "file_path": "F:\\LocalColorService\\test_assets\\neutral_sample.mp4",
+    "is_image": false,
+    "is_video": true,
+    "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+    "duration": 3.0,
+    "size_bytes": 86799,
+    "bit_rate": 231464,
+    "width": 1280,
+    "height": 720,
+    "fps": 25.0,
+    "fps_ratio": "25/1",
+    "total_frames": 75,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "audio_streams": 1,
+    "has_audio": true,
+    "pix_fmt": "yuv420p",
+    "color_space": "bt709",
+    "color_primaries": "unknown",
+    "color_transfer": "unknown",
+    "raw_probe": {
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+          "profile": "Constrained Baseline",
+          "codec_type": "video",
+          "codec_tag_string": "avc1",
+          "codec_tag": "0x31637661",
+          "width": 1280,
+          "height": 720,
+          "coded_width": 1280,
+          "coded_height": 720,
+          "has_b_frames": 0,
+          "sample_aspect_ratio": "1:1",
+          "display_aspect_ratio": "16:9",
+          "pix_fmt": "yuv420p",
+          "level": 31,
+          "color_range": "tv",
+          "color_space": "bt709",
+          "chroma_location": "left",
+          "field_order": "progressive",
+          "refs": 1,
+          "is_avc": "true",
+          "nal_length_size": "4",
+          "id": "0x1",
+          "r_frame_rate": "25/1",
+          "avg_frame_rate": "25/1",
+          "time_base": "1/12800",
+          "start_pts": 0,
+          "start_time": "0.000000",
+          "duration_ts": 38400,
+          "duration": "3.000000",
+          "bit_rate": "98208",
+          "bits_per_raw_sample": "8",
+          "nb_frames": "75",
+          "extradata_size": 43,
+          "disposition": {
+            "default": 1,
+            "dub": 0,
+            "original": 0,
+            "comment": 0,
+            "lyrics": 0,
+            "karaoke": 0,
+            "forced": 0,
+            "hearing_impaired": 0,
+            "visual_impaired": 0,
+            "clean_effects": 0,
+            "attached_pic": 0,
+            "timed_thumbnails": 0,
+            "non_diegetic": 0,
+            "captions": 0,
+            "descriptions": 0,
+            "metadata": 0,
+            "dependent": 0,
+            "still_image": 0,
+            "multilayer": 0
+          },
+          "tags": {
+            "language": "und",
+            "handler_name": "VideoHandler",
+            "vendor_id": "[0][0][0][0]",
+            "encoder": "Lavc61.31.101 libx264"
+          }
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_long_name": "AAC (Advanced Audio Coding)",
+          "profile": "LC",
+          "codec_type": "audio",
+          "codec_tag_string": "mp4a",
+          "codec_tag": "0x6134706d",
+          "sample_fmt": "fltp",
+          "sample_rate": "44100",
+          "channels": 1,
+          "channel_layout": "mono",
+          "bits_per_sample": 0,
+          "initial_padding": 0,
+          "id": "0x2",
+          "r_frame_rate": "0/0",
+          "avg_frame_rate": "0/0",
+          "time_base": "1/44100",
+          "start_pts": 0,
+          "start_time": "0.000000",
+          "duration_ts": 132300,
+          "duration": "3.000000",
+          "bit_rate": "123404",
+          "nb_frames": "131",
+          "extradata_size": 5,
+          "disposition": {
+            "default": 1,
+            "dub": 0,
+            "original": 0,
+            "comment": 0,
+            "lyrics": 0,
+            "karaoke": 0,
+            "forced": 0,
+            "hearing_impaired": 0,
+            "visual_impaired": 0,
+            "clean_effects": 0,
+            "attached_pic": 0,
+            "timed_thumbnails": 0,
+            "non_diegetic": 0,
+            "captions": 0,
+            "descriptions": 0,
+            "metadata": 0,
+            "dependent": 0,
+            "still_image": 0,
+            "multilayer": 0
+          },
+          "tags": {
+            "language": "und",
+            "handler_name": "SoundHandler",
+            "vendor_id": "[0][0][0][0]"
+          }
+        }
+      ],
+      "format": {
+        "filename": "F:\\LocalColorService\\test_assets\\neutral_sample.mp4",
+        "nb_streams": 2,
+        "nb_programs": 0,
+        "nb_stream_groups": 0,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_long_name": "QuickTime / MOV",
+        "start_time": "0.000000",
+        "duration": "3.000000",
+        "size": "86799",
+        "bit_rate": "231464",
+        "probe_score": 100,
+        "tags": {
+          "major_brand": "isom",
+          "minor_version": "512",
+          "compatible_brands": "isomiso2avc1mp41",
+          "encoder": "Lavf61.9.106"
+        }
+      }
+    }
+  },
+  "scenes": [
+    {
+      "scene_id": "scene_0001",
+      "index": 0,
+      "start_time": 0.0,
+      "end_time": 3.0,
+      "start_frame": 0,
+      "end_frame": 75,
+      "duration": 3.0,
+      "representative_times": [
+        0.672,
+        1.5,
+        2.328
+      ],
+      "analysis": {
+        "luminance": {
+          "mean": 0.5225757360458374,
+          "median": 0.5569987893104553,
+          "p01": 0.0028045831713825464,
+          "p05": 0.06992746144533157,
+          "p50": 0.5569987893104553,
+          "p95": 0.9812303781509399,
+          "p99": 0.9812303781509399
+        },
+        "clipping": {
+          "black_clipping_ratio": 0.01484375,
+          "highlight_clipping_ratio": 0.00038194444444444446,
+          "red_highlight_clipping_ratio": 0.0034288194444444444,
+          "green_highlight_clipping_ratio": 0.13105070891203704,
+          "blue_highlight_clipping_ratio": 0.0023549623842592593
+        },
+        "channel": {
+          "r_mean": 0.5186407566070557,
+          "g_mean": 0.5249344706535339,
+          "b_mean": 0.5107981562614441,
+          "r_median": 0.5529412031173706,
+          "g_median": 0.5607843399047852,
+          "b_median": 0.5411764979362488
+        },
+        "white_balance": {
+          "gain_r": 1.0121350163216092,
+          "gain_g": 1.0,
+          "gain_b": 1.0276749518744435,
+          "estimated_temp_offset": 0.015539935552834283,
+          "gray_world_confidence": 0.95
+        },
+        "saturation": {
+          "mean": 0.4771907925605774,
+          "median": 0.13333334028720856,
+          "p95": 1.0,
+          "std": 0.468494713306427
+        },
+        "contrast": {
+          "range_p05_p95": 0.9113029167056084,
+          "rms_contrast": 0.3194112777709961
+        },
+        "anomalies": [
+          "High saturation overflow risk"
+        ]
+      },
+      "suggested_recipe": {
+        "recipe_version": "0.2.0",
+        "service_version": "0.2.0",
+        "ocio_config_id": "",
+        "ocio_config_name": "",
+        "input_color_space": "",
+        "working_color_space": "",
+        "output_color_space": "",
+        "output_standard": "SDR Rec.709",
+        "exposure": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "rgb_gains": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "lift": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gamma": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "gain": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "contrast": 0.95,
+        "pivot": 0.18,
+        "saturation": 1.0,
+        "highlight_rolloff": 0.0,
+        "highlight_softness": 0.0,
+        "color_density": 0.0,
+        "shadow_color": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "skin_protection": 0.0,
+        "gamut_protection": 0.0,
+        "look_id": "neutral_broadcast",
+        "filmic_s_curve": true,
+        "filmic_toe_shoulder": [
+          0.15,
+          0.85
+        ],
+        "lut_size": 33,
+        "strength": 1.0,
+        "recommended": true,
+        "applied": false,
+        "confidence": 0.85,
+        "rationales": [
+          "Luminance median (0.56) is in neutral range. Exposure untouched.",
+          "White balance appears balanced or scene tint is intentional.",
+          "High dynamic range (P95-P05 = 0.91). Reduced contrast slightly to protect highlights.",
+          "Colorful source (mean sat 0.48). Preserved source saturation."
+        ],
+        "safety_bounds": {
+          "rgb_gains": "Clamped to [0.85, 1.15] safe range",
+          "contrast": "Clamped to [0.85, 1.20] safe range",
+          "saturation": "Clamped to [0.85, 1.15] safe range"
+        },
+        "applied_safety_bounds": {},
+        "created_at": "2026-08-04T02:45:58.102801+00:00",
+        "source_media_hash": "",
+        "recipe_hash": ""
+      }
+    }
+  ]
+}

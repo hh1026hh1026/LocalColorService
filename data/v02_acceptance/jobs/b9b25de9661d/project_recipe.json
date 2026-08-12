@@ -1,0 +1,101 @@
+{
+  "recipe_version": "0.2.0",
+  "source_path": "F:\\LocalColorService\\test_assets\\neutral_sample.mp4",
+  "scene_analysis_job_id": "ff2eeab62ef5",
+  "source_media_hash": "",
+  "input_transform": {
+    "standard": "SDR Rec.709"
+  },
+  "project_look": "cinematic_soft_print",
+  "shots": [
+    {
+      "scene_id": "scene_0001",
+      "start_time": 0.0,
+      "end_time": 3.0,
+      "base_correction": {
+        "recipe_version": "0.2.0",
+        "service_version": "0.2.0",
+        "ocio_config_id": "studio-config-v4.0.0_aces-v2.0_ocio-v2.5",
+        "ocio_config_name": "studio-config-v4.0.0_aces-v2.0_ocio-v2.5",
+        "input_color_space": "Gamma 2.4 Encoded Rec.709",
+        "working_color_space": "ACEScct",
+        "output_color_space": "Gamma 2.4 Encoded Rec.709",
+        "output_standard": "SDR Rec.709",
+        "exposure": 0.0,
+        "temperature": 0.0,
+        "tint": 0.0,
+        "rgb_gains": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "lift": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gamma": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "gain": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "contrast": 0.95,
+        "pivot": 0.18,
+        "saturation": 1.0,
+        "highlight_rolloff": 0.0,
+        "highlight_softness": 0.0,
+        "color_density": 0.0,
+        "shadow_color": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "skin_protection": 0.0,
+        "gamut_protection": 0.0,
+        "look_id": "neutral_broadcast",
+        "filmic_s_curve": true,
+        "filmic_toe_shoulder": [
+          0.15,
+          0.85
+        ],
+        "lut_size": 33,
+        "strength": 1.0,
+        "recommended": true,
+        "applied": false,
+        "confidence": 0.85,
+        "rationales": [
+          "Luminance median (0.56) is in neutral range. Exposure untouched.",
+          "White balance appears balanced or scene tint is intentional.",
+          "High dynamic range (P95-P05 = 0.91). Reduced contrast slightly to protect highlights.",
+          "Colorful source (mean sat 0.48). Preserved source saturation."
+        ],
+        "safety_bounds": {
+          "rgb_gains": "Clamped to [0.85, 1.15] safe range",
+          "contrast": "Clamped to [0.85, 1.20] safe range",
+          "saturation": "Clamped to [0.85, 1.15] safe range"
+        },
+        "applied_safety_bounds": {},
+        "created_at": "2026-08-04T02:45:58.102801+00:00",
+        "source_media_hash": "",
+        "recipe_hash": "71ce12cae6adb709ce8880b59c76ae88842311c2070399355a11e88993b6e4a1"
+      },
+      "shot_match": null,
+      "secondary_grade": {},
+      "look_strength": 1.0
+    }
+  ],
+  "output_transform": {
+    "standard": "SDR Rec.709"
+  },
+  "qc_constraints": {
+    "max_adjacent_luminance_jump": 0.25,
+    "max_adjacent_temperature_jump": 12.0,
+    "max_highlight_clipping_ratio": 0.06
+  },
+  "created_at": "2026-08-04T02:45:58.328592+00:00"
+}

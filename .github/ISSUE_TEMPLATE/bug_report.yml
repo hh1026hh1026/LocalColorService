@@ -1,0 +1,52 @@
+name: Bug Report
+description: Create a report to help us fix a bug or issue in LocalColorService
+title: "[BUG]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for reporting a bug! Please fill out the form below to help us reproduce and resolve it quickly.
+  - type: textarea
+    id: describe-bug
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what went wrong...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Upload video / API call to `/v1/color/analyze`
+        2. Call `/v1/color/render` with parameters...
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: A clear description of what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: logs-traceback
+    attributes:
+      label: Logs / Traceback
+      description: Paste any error messages or server log snippets here.
+      render: shell
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Info
+      description: Please provide system details.
+      placeholder: |
+        - OS: Windows 11 / Ubuntu 22.04
+        - Python version: 3.10.x
+        - GPU Model: NVIDIA RTX 4090 / CPU only
+        - FFmpeg build: CUDA enabled / standard
+    validations:
+      required: true

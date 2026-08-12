@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ColorCorrection id="grade"><SOPNode><Slope>1 1 1</Slope><Offset>0 0 0</Offset><Power>1 1 1</Power></SOPNode><SatNode><Saturation>0.972</Saturation></SatNode></ColorCorrection>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>任务管理 · 本地智能调色服务</title>
+  <link rel="stylesheet" href="/static/style.css?v=0.6.19">
+</head>
+<body>
+  <div class="app-shell task-manager-shell">
+    <header class="app-header">
+      <div class="brand"><div class="brand-mark">色</div><div><h1>任务管理 <span>Local Color Service</span></h1><p>查看任务执行状态、处理模式、模型和素材来源。</p></div></div>
+      <div class="header-actions"><a class="ghost-btn task-nav-link" href="/">返回调色工作台</a><button class="ghost-btn" id="refreshTasksBtn" type="button">立即刷新</button></div>
+    </header>
+    <main class="task-manager-main">
+      <section class="panel">
+        <div class="panel-head"><div><h2>任务概览</h2><p id="taskManagerSummary">正在读取…</p></div><span class="status-pill" id="taskManagerUpdated">—</span></div>
+        <div class="task-filter-row" id="taskFilters">
+          <button class="secondary-btn active" data-status="">全部</button><button class="secondary-btn" data-status="processing,cancelling">进行中</button><button class="secondary-btn" data-status="pending">排队中</button><button class="secondary-btn" data-status="completed">已完成</button><button class="secondary-btn" data-status="failed,cancelled">异常/取消</button>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="task-manager-table-wrap"><table class="task-manager-table"><thead><tr><th>任务</th><th>状态 / 进度</th><th>处理模式</th><th>模型 / 引擎</th><th>素材</th><th>更新时间</th><th>操作</th></tr></thead><tbody id="taskManagerRows"></tbody></table></div>
+      </section>
+      <section class="panel task-detail-panel" id="taskDetailPanel" hidden>
+        <div class="panel-head"><div><h2 id="taskDetailTitle">任务详情</h2><p id="taskDetailSubtitle">点击任务编号查看结果和 QC。</p></div><button class="ghost-btn" type="button" id="closeTaskDetail">关闭详情</button></div>
+        <div class="task-detail-grid" id="taskDetailMeta"></div>
+        <div class="task-detail-output" id="taskDetailOutput"></div>
+        <section class="task-edit-workspace" id="taskEditWorkspace" hidden>
+          <div class="task-viewer-column">
+            <div class="task-viewer-frame"><video id="taskDetailVideo" controls preload="metadata"></video><div class="task-viewer-empty" id="taskViewerEmpty">选择复核项后可定位预览</div></div>
+            <div class="task-timeline-row"><span id="taskTimelineCurrent">00:00</span><input id="taskTimelineSeek" type="range" min="0" max="1000" value="0"><span id="taskTimelineDuration">00:00</span></div>
+            <div class="task-review-markers" id="taskReviewMarkers"></div>
+          </div>
+          <aside class="task-inspector">
+            <p class="task-effective-summary" id="taskEffectiveSummary">实际渲染参数会叠加当前 Look 和 SceneGroup 变换。</p>
+            <details class="task-provenance" open>
+              <summary>参数来源与置信度</summary>
+              <div id="taskParameterProvenance" class="task-provenance-grid"></div>
+            </details>
+            <div class="task-inspector-section">
+              <div class="task-inspector-section-head"><strong>基础 / HDR 参数</strong><span>可写入调色配方（GradeRecipe）</span></div>
+              <div class="task-inspector-grid two">
+                <label>色调偏移（Tint）<input id="taskTintInput" type="number" min="-0.5" max="0.5" step="0.01"></label>
+                <label>对比度（Contrast）<input id="taskContrastInput" type="number" min="0.5" max="1.5" step="0.01"></label>
+                <label>对比中心（Pivot）<input id="taskPivotInput" type="number" min="0.01" max="1" step="0.01"></label>
+                <label>饱和度（Saturation）<input id="taskSaturationInput" type="number" min="0" max="2" step="0.01"></label>
+                <label>高光滚降（Rolloff）<input id="taskHighlightRolloffInput" type="number" min="0" max="1" step="0.05"></label>
+                <label>高光柔化（Softness）<input id="taskHighlightSoftnessInput" type="number" min="0" max="1" step="0.05"></label>
+              </div>
+            </div>
+            <details class="task-inspector-section" open>
+              <summary>通道 / 曲线基础</summary>
+              <div class="task-vector-grid">
+                <label>Lift 黑位 R<input id="taskLiftRInput" type="number" step="0.01"></label><label>Lift 黑位 G<input id="taskLiftGInput" type="number" step="0.01"></label><label>Lift 黑位 B<input id="taskLiftBInput" type="number" step="0.01"></label>
+                <label>Gamma 中间调 R<input id="taskGammaRInput" type="number" min="0.01" step="0.01"></label><label>Gamma 中间调 G<input id="taskGammaGInput" type="number" min="0.01" step="0.01"></label><label>Gamma 中间调 B<input id="taskGammaBInput" type="number" min="0.01" step="0.01"></label>
+                <label>Gain 高光 R<input id="taskGainRInput" type="number" step="0.01"></label><label>Gain 高光 G<input id="taskGainGInput" type="number" step="0.01"></label><label>Gain 高光 B<input id="taskGainBInput" type="number" step="0.01"></label>
+                <label>RGB 增益 R<input id="taskRgbRInput" type="number" min="0" step="0.01"></label><label>RGB 增益 G<input id="taskRgbGInput" type="number" min="0" step="0.01"></label><label>RGB 增益 B<input id="taskRgbBInput" type="number" min="0" step="0.01"></label>
+              </div>
+            </details>
+            <div class="task-inspector-section">
+              <div class="task-inspector-section-head"><strong>保护</strong><span>0 = 关闭 · 1 = 最强</span></div>
+              <div class="task-inspector-grid three">
+                <label>肤色保护<input id="taskSkinProtectionInput" type="number" min="0" max="1" step="0.05"></label>
+                <label>色域保护<input id="taskGamutProtectionInput" type="number" min="0" max="1" step="0.05"></label>
+                <label>色彩密度<input id="taskColorDensityInput" type="number" min="-1" max="1" step="0.05"></label>
+              </div>
+            </div>
+            <div class="task-inspector-head"><strong>镜头调色面板</strong><span id="taskSelectedShot">未选择镜头</span></div>
+            <label>曝光 EV<input id="taskExposureInput" type="number" min="-2" max="2" step="0.05"></label>
+            <label>色温<input id="taskTemperatureInput" type="number" min="-50" max="50" step="1"></label>
+            <label>Look 强度<input id="taskLookStrengthInput" type="number" min="0" max="1" step="0.05"></label>
+            <button class="primary-btn" type="button" id="applyTaskGradeBtn" disabled>保存镜头调整</button>
+            <button class="accent-btn" type="button" id="renderTaskPreviewBtn" disabled>重新生成项目预览</button>
+            <p class="task-inspector-help">调整会生成新的 GradePlan revision。保存后再生成预览；原任务结果保留不变。</p>
+            <div id="taskEditStatus" class="task-edit-status"></div>
+          </aside>
+        </section>
+        <div class="task-qc-grid" id="taskDetailQc"></div>
+        <details class="task-review-details" id="taskReviewDetails"><summary>查看复核项与操作提示</summary><div class="task-review-toolbar"><button class="accent-btn" id="taskBatchRepairBtn" type="button" hidden>批量自动修复并预览</button></div><p class="task-review-help">复核项是 QC 给出的定位清单。可以直接定位、复制时间码，或对支持的项目使用“自动修复”。批量修复会合并为一个任务、生成一个新的 GradePlan revision，并自动生成一次预览，原始 revision 保留不变。</p><div id="taskReviewItems"></div></details>
+      </section>
+      <section class="panel task-compare-panel" id="taskComparePanel" hidden>
+        <div class="panel-head"><div><h2>项目结果对比</h2><p>并排查看两条输出视频及对应 QC 判定。</p></div><button class="ghost-btn" type="button" id="closeTaskCompare">关闭对比</button></div>
+        <div class="task-compare-grid"><article><h3 id="compareTitleA">A</h3><video id="compareVideoA" controls preload="metadata"></video><div id="compareQcA" class="task-qc-grid compact"></div></article><article><h3 id="compareTitleB">B</h3><video id="compareVideoB" controls preload="metadata"></video><div id="compareQcB" class="task-qc-grid compact"></div></article></div>
+      </section>
+    </main>
+  </div>
+  <script src="/static/tasks.js?v=0.6.19"></script>
+</body>
+</html>

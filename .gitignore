@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+venv/
+env/
+.venv/
+ENV/
+
+# Environment Variables
+.env
+.env.local
+!.env.example
+
+# Pytest & Testing Artifacts
+.pytest_cache/
+.test-runtime/
+tmp_pytest/
+.coverage
+htmlcov/
+*.log
+
+# Heavy Media Files & Test Binaries (Exclude sample mp4/png dumps)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wmv
+*.png
+*.jpg
+*.jpeg
+
+# Exception for documentation or core assets if any under docs/ or test_assets/
+!test_assets/**
+!docs/**/*.png
+!docs/**/*.jpg
+
+# Local Application Data & Database Outputs
+data/jobs/
+data/cache/
+data/*.db
+data/*.sqlite*
+data/temp/
+
+# Strange folder path artifacts
+F*
+
+# IDE & OS Specific
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

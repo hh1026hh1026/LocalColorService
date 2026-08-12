@@ -1,0 +1,77 @@
+{
+  "id": "B",
+  "label": "balanced",
+  "look_id": "clean_commercial",
+  "strength": 0.65,
+  "recipe": {
+    "recipe_version": "0.2.0",
+    "service_version": "0.2.0",
+    "ocio_config_id": "studio-config-v4.0.0_aces-v2.0_ocio-v2.5",
+    "ocio_config_name": "studio-config-v4.0.0_aces-v2.0_ocio-v2.5",
+    "input_color_space": "Gamma 2.4 Encoded Rec.709",
+    "working_color_space": "ACEScct",
+    "output_color_space": "Gamma 2.4 Encoded Rec.709",
+    "output_standard": "SDR Rec.709",
+    "exposure": 0.162,
+    "temperature": -0.0,
+    "tint": 0.0,
+    "rgb_gains": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "lift": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "gamma": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "gain": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "contrast": 1.0190000000000001,
+    "pivot": 0.18,
+    "saturation": 1.026,
+    "highlight_rolloff": 0.0,
+    "highlight_softness": 0.1625,
+    "color_density": 0.052000000000000005,
+    "shadow_color": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "skin_protection": 0.45499999999999996,
+    "gamut_protection": 0.45499999999999996,
+    "look_id": "clean_commercial",
+    "filmic_s_curve": true,
+    "filmic_toe_shoulder": [
+      0.15,
+      0.85
+    ],
+    "lut_size": 33,
+    "strength": 0.65,
+    "recommended": true,
+    "applied": false,
+    "confidence": 0.88,
+    "rationales": [
+      "Reinhard Statistical Transfer: Exposure shift=+0.11 EV",
+      "Contrast ratio=0.98, Saturation ratio=1.00",
+      "Temperature offset=-0.0° based on reference Lab distribution",
+      "Applied Look Package 'clean_commercial' at 65% strength."
+    ],
+    "safety_bounds": {},
+    "applied_safety_bounds": {},
+    "created_at": "2026-08-04T02:46:01.720721+00:00",
+    "source_media_hash": "",
+    "recipe_hash": "998e3e5af4e465ba0125542480842889e00663ffd6308327974c51f5ee2fc296"
+  },
+  "lut_path": "F:\\LocalColorService\\data\\v02_acceptance\\jobs\\0566bcfcd806\\candidate_b.cube",
+  "selected_lut_path": "F:\\LocalColorService\\data\\v02_acceptance\\jobs\\65b49655fd53\\selected.cube",
+  "source_candidate_job_id": "0566bcfcd806"
+}

@@ -1,0 +1,15 @@
+[project]
+name = "local-color-service"
+version = "0.1.0"
+description = "SDR Rec.709 Auto Color Grading Engine & REST API Service"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["color-grading", "fastapi", "opencv", "ocio", "canoncgt", "adaint", "video-processing"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+pythonpath = ["."]
+asyncio_mode = "auto"
+

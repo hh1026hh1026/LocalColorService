@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "scene_count": 1,
+  "adjacent_luminance_jumps": [],
+  "adjacent_temperature_jumps": [],
+  "clipping_scenes": [],
+  "lut_reports": [
+    {
+      "path": "F:\\LocalColorService\\data\\v02_acceptance\\jobs\\b9b25de9661d\\shot_luts\\scene_0001.cube",
+      "size": 33,
+      "finite": true,
+      "in_range_ratio": 1.0,
+      "monotonic_violation_ratio": 0.0,
+      "neutral_axis_max_spread": 0.047128,
+      "max_gradient": 0.057288,
+      "passed": true,
+      "warnings": []
+    }
+  ],
+  "warnings": [],
+  "errors": []
+}
