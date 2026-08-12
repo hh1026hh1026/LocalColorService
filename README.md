@@ -1,9 +1,17 @@
-# LocalColorService (v0.1.0)
+<div align="center">
+  <img src="docs/images/logo.png" alt="LocalColorService Logo" width="120" />
+  <h1>LocalColorService (v0.1.0)</h1>
+  <p><strong>Open-Source SDR Rec.709 Auto Color Grading Engine & REST API Service</strong></p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
-[![Release](https://img.shields.io/badge/release-v0.1.0-green.svg)](CHANGELOG.md)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](app/main.py)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+  [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
+  [![Release](https://img.shields.io/badge/release-v0.1.0-green.svg)](CHANGELOG.md)
+  [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](app/main.py)
+</div>
+
+<br/>
+
+![LocalColorService Banner](docs/images/banner.png)
 
 **LocalColorService** is an open-source, high-performance SDR Rec.709 semi-automated video color grading engine and REST API service. It combines traditional broadcast color science, OpenColorIO (OCIO) color management, neural look transfer models (**AdaInt** and **CanonCGT**), face skin-tone protection, and automated 4-level Quality Control (QC).
 
@@ -104,6 +112,10 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 - **Interactive Workbench**: `http://127.0.0.1:8000/`
 - **Task Dashboard**: `http://127.0.0.1:8000/tasks`
 - **OpenAPI Swagger Docs**: `http://127.0.0.1:8000/docs`
+
+<br/>
+
+![LocalColorService Color Workbench Preview](docs/images/workbench.png)
 
 ---
 
