@@ -95,11 +95,7 @@ powershell -ExecutionPolicy Bypass -File scripts\install_canoncgt.ps1
 
 ### 3. Start the API Service
 
-```powershell
-start.bat
-```
-
-Or run via Uvicorn directly:
+Run via Uvicorn:
 
 ```bash
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
