@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-fast environment diagnostics for Local Color Service V0.6.9."""
+"""Fail-fast environment diagnostics for Local Color Service V0.1.0."""
 
 from __future__ import annotations
 
