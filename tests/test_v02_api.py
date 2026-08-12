@@ -1,11 +1,12 @@
 from fastapi.testclient import TestClient
 
+from app.config import settings
 from app.main import app
 
 
 def test_v02_discovery_endpoints():
     with TestClient(app) as client:
-        assert client.get("/version").json()["version"] == "0.6.9"
+        assert client.get("/version").json()["version"] == settings.VERSION
         looks = client.get("/v1/looks").json()["looks"]
         assert len(looks) == 9
         assert all(item["must_protect"] for item in looks)
